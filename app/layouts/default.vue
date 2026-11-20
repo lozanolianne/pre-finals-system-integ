@@ -1,6 +1,7 @@
 
 <template>
   <v-app class="app-shell">
+
     <!-- Sidebar -->
     <v-navigation-drawer
       v-model="drawer"
@@ -23,16 +24,16 @@
       </div>
 
       <!-- Navigation -->
-      <v-list nav>
+      <v-list nav class="sidebar-nav">
         <v-list-item
           v-for="item in items"
           :key="item.to"
           :to="item.to"
           :prepend-icon="item.icon"
           :title="item.title"
-          color="primary"
           rounded="lg"
           exact
+          class="nav-item"
           @click="closeDrawer"
         />
       </v-list>
@@ -60,8 +61,10 @@
           v-if="mobile"
           icon="mdi-menu"
           variant="text"
+          color="primary"
           @click="drawer = !drawer"
         />
+
         <h2>{{ pageTitle }}</h2>
       </header>
 
@@ -74,10 +77,15 @@
     <v-dialog v-model="logoutDialog" max-width="400">
       <v-card rounded="xl" class="logout-dialog">
         <v-card-text class="text-center">
-          <v-icon color="error" size="40">mdi-logout</v-icon>
+          <v-icon color="error" size="40">
+            mdi-logout
+          </v-icon>
 
           <h3>Logout?</h3>
-          <p>Are you sure you want to logout from your account?</p>
+
+          <p>
+            Are you sure you want to logout from your account?
+          </p>
         </v-card-text>
 
         <v-card-actions class="logout-actions">
@@ -89,12 +97,17 @@
             Cancel
           </v-btn>
 
-          <v-btn color="error" variant="flat" @click="logout">
+          <v-btn
+            color="error"
+            variant="flat"
+            @click="logout"
+          >
             Logout
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
+
   </v-app>
 </template>
 
@@ -109,9 +122,21 @@ const user = ref<any>(null)
 const logoutDialog = ref(false)
 
 const items = [
-  { title: 'Dashboard', icon: 'mdi-view-dashboard-outline', to: '/' },
-  { title: 'QR Scanner', icon: 'mdi-qrcode-scan', to: '/qr-scanner' },
-  { title: 'Weather', icon: 'mdi-weather-partly-cloudy', to: '/weather' }
+  {
+    title: 'Dashboard',
+    icon: 'mdi-view-dashboard-outline',
+    to: '/'
+  },
+  {
+    title: 'QR Scanner',
+    icon: 'mdi-qrcode-scan',
+    to: '/qr-scanner'
+  },
+  {
+    title: 'Weather',
+    icon: 'mdi-weather-partly-cloudy',
+    to: '/weather'
+  }
 ]
 
 const initials = computed(() =>
@@ -131,14 +156,18 @@ const pageTitle = computed(() =>
 
 onMounted(() => {
   try {
-    user.value = JSON.parse(localStorage.getItem('google_user') || 'null')
+    user.value = JSON.parse(
+      localStorage.getItem('google_user') || 'null'
+    )
   } catch {
     user.value = null
   }
 })
 
 function closeDrawer() {
-  if (mobile.value) drawer.value = false
+  if (mobile.value) {
+    drawer.value = false
+  }
 }
 
 async function logout() {
@@ -153,7 +182,6 @@ async function logout() {
 </script>
 
 <style>
-/* General */
 html,
 body,
 #__nuxt {
@@ -168,7 +196,7 @@ body,
 
 /* Sidebar */
 .sidebar {
-  background: white !important;
+  background: #ffffff !important;
   border-right: 1px solid #d8eae7 !important;
 }
 
@@ -206,11 +234,42 @@ body,
   white-space: nowrap;
 }
 
-.sidebar .v-list-item--active {
-  background: #e5f4f2;
+/* Navigation Items */
+.sidebar-nav {
+  padding: 12px !important;
+}
+
+.nav-item {
+  min-height: 48px !important;
+  margin-bottom: 6px;
+  color: #315e5a !important;
+  opacity: 1 !important;
+}
+
+.nav-item :deep(.v-list-item-title) {
+  color: #315e5a !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  opacity: 1 !important;
+}
+
+.nav-item :deep(.v-icon) {
+  color: #367a75 !important;
+  opacity: 1 !important;
+}
+
+.nav-item.v-list-item--active {
+  background: #e5f4f2 !important;
   color: #367a75 !important;
 }
 
+.nav-item.v-list-item--active :deep(.v-list-item-title),
+.nav-item.v-list-item--active :deep(.v-icon) {
+  color: #367a75 !important;
+  opacity: 1 !important;
+}
+
+/* Sidebar Logout */
 .sidebar-bottom {
   padding: 16px;
   border-top: 1px solid #e5f0ee;
@@ -233,7 +292,7 @@ body,
   font-weight: 700;
 }
 
-/* Page */
+/* Page Content */
 .page-content {
   width: 100%;
   max-width: 1440px;

@@ -1,4 +1,3 @@
-
 <template>
   <div class="weather-page">
     <v-container class="weather-container">
